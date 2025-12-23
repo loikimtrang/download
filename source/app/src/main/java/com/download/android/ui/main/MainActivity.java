@@ -37,22 +37,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         VersionResponse versionResponse = new VersionResponse();
         versionResponse.setUrlApk("https://ra-dpc-update-dev.racontrol.de/app.apk");
 
-        PersistableBundle bundle = new PersistableBundle();
-        bundle.putString("apk_url", versionResponse.getUrlApk());
-
-        ComponentName componentName = new ComponentName(this, ApkDownloadJobService.class);
-        JobInfo jobInfo = new JobInfo.Builder(123, componentName)
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .setPersisted(false)
-                .setOverrideDeadline(0)
-                .setExtras(bundle)
-                .build();
-
-        JobScheduler scheduler = (JobScheduler) this.getSystemService(Context.JOB_SCHEDULER_SERVICE);
-        scheduler.schedule(jobInfo);
+        DownloadApkUtils.downloadApk(this, versionResponse.getUrlApk(), "update_app.apk");
 
         Toast.makeText(this, "Bắt đầu tải APK", Toast.LENGTH_SHORT).show();
     }
+
     private final BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {

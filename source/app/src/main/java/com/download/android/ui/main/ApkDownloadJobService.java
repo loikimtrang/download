@@ -17,28 +17,9 @@ public class ApkDownloadJobService extends JobService {
             return false;
         }
 
-        downloadApk(apkUrl);
+        DownloadApkUtils.downloadApk(this, apkUrl, "update_app.apk");
         jobFinished(params, false);
         return true;
-    }
-
-    private void downloadApk(String url) {
-        DownloadManager.Request request =
-                new DownloadManager.Request(Uri.parse(url));
-
-        request.setTitle("Đang tải bản cập nhật");
-        request.setDestinationInExternalPublicDir(
-                Environment.DIRECTORY_DOWNLOADS,
-                "update_app.apk"
-        );
-        request.setNotificationVisibility(
-                DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
-        );
-
-        DownloadManager manager =
-                (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-
-        manager.enqueue(request);
     }
 
     @Override
